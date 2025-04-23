@@ -1,11 +1,17 @@
+import { Locator } from "@playwright/test";
 import BasePage from "./BasePage";
 
+type SidebarLinks = "Garage" | "Fuel expenses" | "Instructions" | "Profile" | "Settings" | "Log out";
+
 export default class Sidebar extends BasePage{
-        public navigationSidebar = this.page.locator("nav[class*='sidebar']");
-        public garageLink = this.navigationSidebar.locator("a[routerlink='garage']");
-        public expensesLink = this.navigationSidebar.locator("a[routerlink='expenses']");
-        public instructionsLink = this.navigationSidebar.locator("a[routerlink='instructions']");
-        public profileLink = this.navigationSidebar.locator("a[routerlink='profile']");
-        public settingsLink = this.navigationSidebar.locator("a[routerlink='settings']");
-        public logOutLink = this.navigationSidebar.locator("a", {hasText: "Log out"});
+    public navigationSidebar = this.page.locator("nav[class*='sidebar']");
+
+    async getLink(name: SidebarLinks): Promise<Locator> {
+        return this.navigationSidebar.locator("a", {hasText: name});
+    };
+
+    async clickLink(name: SidebarLinks): Promise<void> {
+        const link = await this.getLink(name);
+        await link.click();
+    };
 };
