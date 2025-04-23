@@ -7,7 +7,7 @@ export default class LoginPopUp extends BasePopUp {
         public registrationButton = this.page.locator("button", { hasText: "Registration" });
         public loginButton = this.page.locator("button", { hasText: "Login" });
 
-    async fillAndSubmitForm(email: string, password: string) {
+    async fillAndSubmitForm(email: string, password: string): Promise<void> {
         await this.emailInput.fill(email);
         await this.passwordInput.fill(password);
         await this.loginButton.click();
