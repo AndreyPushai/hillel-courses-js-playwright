@@ -1,8 +1,9 @@
+import { Page } from "@playwright/test";
+
 export default class BasePage {
-    /**
-     * @param {import('@playwright/test').Page} page
-     */
-    constructor(page){
+    public page: Page;
+
+    constructor(page: Page){
         this.page = page;
     }
 }
