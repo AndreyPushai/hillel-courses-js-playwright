@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import {Homepage, LoginPopUp, RegistrationPopUp, RemoveAccountPopUp, SettingsPage, Sidebar} from '../poms';
-import {beforeEach} from 'node:test';
 
 
 let homepage: Homepage;
@@ -19,30 +18,33 @@ test.describe("Positive Registration tests", () => {
 
         loginPopUp = new LoginPopUp(page);
 
-        await expect(loginPopUp.popUp).toBeVisible();
+        await loginPopUp.verifyIsVisible(true);
         await loginPopUp.registrationButton.click();
-        await expect(loginPopUp.popUp).not.toBeVisible();
+        await loginPopUp.verifyIsVisible(false);
 
         registrationPopUp = new RegistrationPopUp(page);
-        await expect(registrationPopUp.popUp).toBeVisible();
-        await expect(registrationPopUp.popUpTitle).toHaveText("Registration");
+        await registrationPopUp.verifyIsVisible(true);
+        await registrationPopUp.verifyPopUpTitle("Registration");
         await registrationPopUp.fillAndSubmitForm(
             "name", "lastName", `test+${ts}@email.com`, "Password1");
-        await expect(registrationPopUp.popUp).not.toBeVisible();
+        await registrationPopUp.verifyIsVisible(false);
 
         await expect(page).toHaveURL("/panel/garage");
 
         // Delete user account after it was created
         sidebar = new Sidebar(page);
-        await sidebar.settingsLink.click();
+        await sidebar.clickLink("Settings");
         await expect(page).toHaveURL("/panel/settings");
 
         settingsPage = new SettingsPage(page);
-        await settingsPage.removeMyAccountButton.click();
+        await settingsPage.clickRemoveMyAccountButton();
 
         removeAccountPopUp = new RemoveAccountPopUp(page);
-        await expect(removeAccountPopUp.popUpTitle).toHaveText("Remove account");
-        await removeAccountPopUp.removeButton.click();
+        await removeAccountPopUp.verifyIsVisible(true);
+        await removeAccountPopUp.verifyPopUpTitle("Remove account");
+        await removeAccountPopUp.confirmRemoveAccount();
+        await removeAccountPopUp.verifyIsVisible(false);
+
         await expect(page).toHaveURL("/");
     });
 });
