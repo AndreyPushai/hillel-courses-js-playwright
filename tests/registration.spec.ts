@@ -12,40 +12,53 @@ const ts = Date.now(); // timestamp
 
 test.describe("Positive Registration tests", () => {
     test("Test user successfully registered", async ({ page }) => {
-        homepage = new Homepage(page);
-        await page.goto("/");
-        await homepage.signInButton.click();
 
-        loginPopUp = new LoginPopUp(page);
+        await test.step("Open Login popup", async () => {
+            await page.goto("/");
+            homepage = new Homepage(page);
+            await homepage.signInButton.click();
+        });
 
-        await loginPopUp.verifyIsVisible(true);
-        await loginPopUp.registrationButton.click();
-        await loginPopUp.verifyIsVisible(false);
+        await test.step("Open Registration popup from Login popup", async () => {
+            loginPopUp = new LoginPopUp(page);
 
-        registrationPopUp = new RegistrationPopUp(page);
-        await registrationPopUp.verifyIsVisible(true);
-        await registrationPopUp.verifyPopUpTitle("Registration");
-        await registrationPopUp.fillAndSubmitForm(
-            "name", "lastName", `test+${ts}@email.com`, "Password1");
-        await registrationPopUp.verifyIsVisible(false);
+            await loginPopUp.verifyIsVisible(true);
+            await loginPopUp.registrationButton.click();
+            await loginPopUp.verifyIsVisible(false);
+        });
 
-        await expect(page).toHaveURL("/panel/garage");
+        await test.step("Fill and submit Registration form", async () => {
+            registrationPopUp = new RegistrationPopUp(page);
 
-        // Delete user account after it was created
-        sidebar = new Sidebar(page);
-        await sidebar.clickLink("Settings");
-        await expect(page).toHaveURL("/panel/settings");
+            await registrationPopUp.verifyIsVisible(true);
+            await registrationPopUp.verifyPopUpTitle("Registration");
+            await registrationPopUp.fillAndSubmitForm(
+                "name", "lastName", `test+${ts}@email.com`, "Password1");
+            await registrationPopUp.verifyIsVisible(false);
 
-        settingsPage = new SettingsPage(page);
-        await settingsPage.clickRemoveMyAccountButton();
+        });
 
-        removeAccountPopUp = new RemoveAccountPopUp(page);
-        await removeAccountPopUp.verifyIsVisible(true);
-        await removeAccountPopUp.verifyPopUpTitle("Remove account");
-        await removeAccountPopUp.confirmRemoveAccount();
-        await removeAccountPopUp.verifyIsVisible(false);
+        await test.step("User redirected to garage page", async () => {
+            await expect(page).toHaveURL("/panel/garage");
+        });
 
-        await expect(page).toHaveURL("/");
+
+        await test.step("Delete user account after it was created", async () => {
+            sidebar = new Sidebar(page);
+            await sidebar.clickLink("Settings");
+            await expect(page).toHaveURL("/panel/settings");
+
+            settingsPage = new SettingsPage(page);
+            await settingsPage.clickRemoveMyAccountButton();
+
+            removeAccountPopUp = new RemoveAccountPopUp(page);
+            await removeAccountPopUp.verifyIsVisible(true);
+            await removeAccountPopUp.verifyPopUpTitle("Remove account");
+            await removeAccountPopUp.confirmRemoveAccount();
+            await removeAccountPopUp.verifyIsVisible(false);
+
+            await expect(page).toHaveURL("/");
+        });
     });
 });
 
