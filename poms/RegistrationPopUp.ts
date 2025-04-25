@@ -19,11 +19,11 @@ export default class RegistrationPopUp extends BasePopUp {
                       email: string,
                       password: string): Promise<void> {
 
-        await this.nameInput.type(name);
-        await this.lastNameInput.type(lastName);
-        await this.emailInput.type(email);
-        await this.passwordInput.type(password);
-        await this.repeatPasswordInput.type(password);
+        await this.nameInput.fill(name);
+        await this.lastNameInput.fill(lastName);
+        await this.emailInput.fill(email);
+        await this.passwordInput.fill(password);
+        await this.repeatPasswordInput.fill(password);
         await this.registerButton.click();
     };
 };
