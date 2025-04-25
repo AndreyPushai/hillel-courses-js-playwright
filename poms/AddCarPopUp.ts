@@ -1,7 +1,7 @@
 import BasePopUp from "./BasePopUp";
 
 
-export type CarModels = {
+export type TCarModels = {
     Audi: "TT" | "R8" | "Q7" | "A6" | "A8",
     BMW: "3" | "5" | "X5" | "X6" | "Z3",
     Ford: "Fiesta" | "Focus" | "Fusion" | "Mondeo" | "Sierra",
@@ -16,8 +16,8 @@ export default class AddCarPopUp extends BasePopUp {
     public mileageInput = this.popUp.locator("input[id='addCarMileage']");
     public addButton = this.popUp.locator("button", {hasText: "Add"});
 
-    async selectBrand(
-        brand: "Audi" | "BMW" | "Ford" | "Porsche" | "Fiat"
+    async selectBrand<Brand extends keyof TCarModels>(
+        brand: Brand
     ): Promise<void> {
         await this.brandSelect.selectOption(brand);
     };
@@ -26,9 +26,9 @@ export default class AddCarPopUp extends BasePopUp {
         await this.modelSelect.selectOption(model);
     };
 
-    async selectCar<Brand extends keyof CarModels>(
+    async selectCar<Brand extends keyof TCarModels>(
         brand: Brand,
-        model: CarModels[Brand],
+        model: TCarModels[Brand],
         mileage: string | number
     ): Promise<void> {
         await this.selectBrand(brand);

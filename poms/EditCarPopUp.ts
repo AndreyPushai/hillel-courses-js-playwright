@@ -1,5 +1,5 @@
 import BasePopUp from "./BasePopUp";
-import type { CarModels } from "./AddCarPopUp";
+import type { TCarModels } from "./AddCarPopUp";
 
 export default class EditCarPopUp extends BasePopUp {
     public popUp = this.page.locator("app-edit-car-modal");
@@ -9,8 +9,8 @@ export default class EditCarPopUp extends BasePopUp {
     public saveButton = this.popUp.locator("button", {hasText: "Save"});
     public removeCarButton = this.popUp.locator("button", {hasText: "Remove car"});
 
-    async selectBrand(
-        brand: "Audi" | "BMW" | "Ford" | "Porsche" | "Fiat"
+    async selectBrand<Brand extends keyof TCarModels>(
+        brand: Brand
     ): Promise<void> {
         await this.brandSelect.selectOption(brand);
     };
@@ -19,9 +19,9 @@ export default class EditCarPopUp extends BasePopUp {
         await this.modelSelect.selectOption(model);
     };
 
-    async selectCar<Brand extends keyof CarModels>(
+    async selectCar<Brand extends keyof TCarModels>(
         brand: Brand,
-        model: CarModels[Brand],
+        model: TCarModels[Brand],
         mileage: string | number
     ): Promise<void> {
         await this.selectBrand(brand);
