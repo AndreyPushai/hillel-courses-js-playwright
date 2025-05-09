@@ -4,11 +4,10 @@
   "description": "Learning project for JS/TS and Playwright framework",
   "main": "index.js",
   "scripts": {
-    "test:headless": "playwright test",
-    "test:headed": "playwright test --headed --workers=1",
-    "test:headed:safari": "playwright test --headed --project=webkit",
-    "test:headed:chromium": "playwright test --headed --project=chromium",
-    "test:headed:chrome": "playwright test --headed --project='Google Chrome' --workers=1",
+    "test:headless:qauto": "ENV=qauto playwright test",
+    "test:headless:qauto2": "ENV=qauto2 playwright test",
+    "test:headed:qauto": "ENV=qauto playwright test --headed --workers=1",
+    "test:headed:qauto2": "ENV=qauto2 playwright test --headed --workers=1",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
