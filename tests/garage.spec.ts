@@ -1,45 +1,22 @@
 import {
-    Homepage,
-    GaragePage,
     AddCarPopUp,
     CarItem,
-    LoginPopUp,
     EditCarPopUp,
     RemoveCarPopUp,
 } from "../poms";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../fixtures/fixtures";
 
-let homepage: Homepage;
-let loginPopUp: LoginPopUp;
-let garagePage: GaragePage;
 let addCarPopUp: AddCarPopUp;
 let carItem: CarItem;
 let editCarPopUp: EditCarPopUp;
 let removeCarPopUp: RemoveCarPopUp;
 
 test.describe("Testing garage flow", () => {
-    test.beforeEach(async ({ page }) => {
-        homepage = new Homepage(page);
-        await page.goto("/");
-        await homepage.signInButton.click();
-
-        loginPopUp = new LoginPopUp(page);
-        await loginPopUp.verifyIsVisible(true);
-        await loginPopUp.verifyPopUpTitle("Log in");
-        await loginPopUp.fillAndSubmitForm(
-            process.env.userEmail, process.env.userPassword
-        );
-
-        await loginPopUp.verifyIsVisible(false);
-        await expect(page).toHaveURL("/panel/garage");
-    });
-
-    test("Test user can create, edit and delete auto", async ({ page }) => {
+    test("Test user can create, edit and delete auto", async ({ userGaragePage }) => {
         await test.step("Add a car", async () => {
-            garagePage = new GaragePage(page);
-            await garagePage.clickAddCarButton();
+            await userGaragePage.clickAddCarButton();
 
-            addCarPopUp = new AddCarPopUp(page);
+            addCarPopUp = new AddCarPopUp(userGaragePage.page);
             await addCarPopUp.verifyIsVisible(true);
             await addCarPopUp.verifyPopUpTitle("Add a car");
             await addCarPopUp.selectCar("Porsche", "Cayenne", "340123");
@@ -48,7 +25,7 @@ test.describe("Testing garage flow", () => {
         });
 
         await test.step("Verify that car was added to the table", async () => {
-            carItem = new CarItem(page);
+            carItem = new CarItem(userGaragePage.page);
             await expect(carItem.item).toBeVisible();
             await expect(carItem.carName).toHaveText("Porsche Cayenne");
             await expect(carItem.updateMileageInput).toHaveValue("340123");
@@ -57,7 +34,7 @@ test.describe("Testing garage flow", () => {
         await test.step("Make changes to created car", async () => {
             await carItem.editButton.click();
 
-            editCarPopUp = new EditCarPopUp(page);
+            editCarPopUp = new EditCarPopUp(userGaragePage.page);
             await editCarPopUp.verifyIsVisible(true);
             await editCarPopUp.verifyPopUpTitle("Edit a car");
             await editCarPopUp.selectCar("Audi", "TT", "340124");
@@ -74,13 +51,13 @@ test.describe("Testing garage flow", () => {
         await test.step("Remove car", async () => {
             await carItem.editButton.click();
 
-            editCarPopUp = new EditCarPopUp(page);
+            editCarPopUp = new EditCarPopUp(userGaragePage.page);
             await editCarPopUp.verifyIsVisible(true);
             await editCarPopUp.verifyPopUpTitle("Edit a car");
             await editCarPopUp.clickRemoveCarButton();
             await editCarPopUp.verifyIsVisible(false);
             
-            removeCarPopUp = new RemoveCarPopUp(page);
+            removeCarPopUp = new RemoveCarPopUp(userGaragePage.page);
             await removeCarPopUp.verifyIsVisible(true);
             await removeCarPopUp.verifyPopUpTitle("Remove car");
             await removeCarPopUp.clickRemoveButton();
