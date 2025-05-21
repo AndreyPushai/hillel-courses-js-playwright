@@ -13,3 +13,4 @@ export {default as RemoveEntryPopUp} from "./RemoveEntryPopUp";
 //export {default as FuelExpensesPage} from "./FuelExpensesPage";
 export {default as EditCarPopUp} from "./EditCarPopUp";
 export {default as RemoveCarPopUp} from "./RemoveCarPopUp";
+export {default as ProfilePage} from "./ProfilePage";
