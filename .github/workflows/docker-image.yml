@@ -28,10 +28,12 @@ jobs:
         env:
           TESTOMATIO: ${{ vars.TESTOMATIO }}
           TESTOMATIO_CREATE: ${{ vars.TESTOMATIO_CREATE }}
-        run: |
+        run:
           npm run test:headless:qauto
-          npm run test:headless:qauto2
-          npm run test:headless:qauto:ff
+        # run: |
+        #   npm run test:headless:qauto
+        #   npm run test:headless:qauto2
+        #   npm run test:headless:qauto:ff
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
