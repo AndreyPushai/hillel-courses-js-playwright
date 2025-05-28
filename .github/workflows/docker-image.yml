@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps s
+        run: npx playwright install --with-deps
       - name: Run tests
         env:
           TESTOMATIO: ${{ vars.TESTOMATIO }}
