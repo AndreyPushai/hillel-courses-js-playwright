@@ -4,8 +4,8 @@
   "description": "Learning project for JS/TS and Playwright framework",
   "main": "index.js",
   "scripts": {
-    "test:headless:qauto": "ENV=qauto playwright test",
-    "test:headless:qauto2": "ENV=qauto2 playwright test",
+    "test:headless:qauto": "ENV=qauto playwright test --project=chromium",
+    "test:headless:qauto2": "ENV=qauto2 playwright test --project=chromium",
     "test:headless:qauto:ff": "ENV=qauto playwright test --project=firefox",
     "test:headed:qauto": "ENV=qauto playwright test --headed --workers=1",
     "test:headed:qauto2": "ENV=qauto2 playwright test --headed --workers=1",
