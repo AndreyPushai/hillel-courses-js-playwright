@@ -1,18 +1,42 @@
 name: Docker Image CI
 
 on:
+  schedule:
+    - cron: "*/30 * * * *"
   push:
-    branches: [ "main" ]
+    branches:
+      - "*"
   pull_request:
     branches: [ "main" ]
 
 jobs:
-
-  build:
-
-    runs-on: ubuntu-latest
-
+  tests: 
+  name: 'PW E2E tests'
+  runs-on: ubuntu-latest
+  container:
+    image: mcr.microsoft.com/playwright:v1.52.0
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps s
+      - name: Run tests
+        env:
+          TESTOMATIO: ${{ vars.TESTOMATIO }}
+          TESTOMATIO_CREATE: ${{ vars.TESTOMATIO_CREATE }}
+        run: |
+          npm run test:headless:qauto
+          npm run test:headless:qauto2
+          npm run test:headless:qauto:ff
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-default
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
