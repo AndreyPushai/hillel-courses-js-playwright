@@ -9,7 +9,7 @@ export {default as AddCarPopUp} from "./AddCarPopUp";
 export {default as CarItem} from "./CarItem";
 //export {default as AddExpensePopUp} from "./AddExpensePopUp";
 //export {default as FuelExpensesRow} from "./FuelExpensesRow";
-export {default as RemoveEntryPopUp} from "./RemoveEntryPopUp";
+// export {default as RemoveEntryPopUp} from "./RemoveEntryPopUp";
 //export {default as FuelExpensesPage} from "./FuelExpensesPage";
 export {default as EditCarPopUp} from "./EditCarPopUp";
 export {default as RemoveCarPopUp} from "./RemoveCarPopUp";

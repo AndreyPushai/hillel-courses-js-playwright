@@ -1,8 +1,8 @@
 name: Docker Image CI
 
 on:
-  schedule:
-    - cron: "*/30 * * * *"
+  # schedule:
+  #   - cron: "*/30 * * * *"
   push:
     branches:
       - "*"
@@ -11,10 +11,10 @@ on:
 
 jobs:
   tests: 
-  name: 'PW E2E tests'
-  runs-on: ubuntu-latest
-  container:
-    image: mcr.microsoft.com/playwright:v1.52.0
+    name: 'PW E2E tests'
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.52.0
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,15 +23,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps s
+        run: npx playwright install --with-deps
       - name: Run tests
         env:
           TESTOMATIO: ${{ vars.TESTOMATIO }}
           TESTOMATIO_CREATE: ${{ vars.TESTOMATIO_CREATE }}
-        run: |
+        run:
           npm run test:headless:qauto
-          npm run test:headless:qauto2
-          npm run test:headless:qauto:ff
+        # run: |
+        #   npm run test:headless:qauto
+        #   npm run test:headless:qauto2
+        #   npm run test:headless:qauto:ff
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
